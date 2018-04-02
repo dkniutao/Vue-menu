@@ -43,60 +43,23 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="外层 Dialog" :visible.sync="outerVisible">
-      <el-dialog
-        width="30%"
-        title="内层 Dialog"
-        :visible.sync="innerVisible"
-        append-to-body>
-      </el-dialog>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="outerVisible = false">取 消</el-button>
-        <el-button type="primary" @click="innerVisible = true">打开内层 Dialog</el-button>
-      </div>
-    </el-dialog>
+    <iTEMDialog
+    :dialogFormVisible='dialogFormVisible' v-on:CloseDialog="CloseDialog"></iTEMDialog>
   </div>
 </template>
 
 <script>
+import iTEMDialog from '../../components/dialog.vue'
 export default {
   components: {
+    iTEMDialog
   },
   props: [
   ],
   data () {
     return {
-      tableData: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }],
-      outerVisible: false,
-      innerVisible: false
+      dialogFormVisible: false,
+      tableData: []
     }
   },
   computed: {
@@ -106,10 +69,22 @@ export default {
       console.log(row)
     },
     compile (row) {
-      this.outerVisible = true
+      this.dialogFormVisible = true
+    },
+    CloseDialog () {
+      this.dialogFormVisible = false
+    },
+    tabledata () {
+      this.$http.get('http://localhost:8080/api/goods').then((response) => {
+        this.tableData = response.data.data.tabledata
+        console.log('1111111111', response.data.data)
+      })
     }
   },
+  beforeCreate () {
+  },
   created () {
+    this.tabledata()
   },
   mounted () {
   }

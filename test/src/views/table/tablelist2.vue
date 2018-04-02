@@ -19,6 +19,9 @@ export default {
   methods: {
   },
   created () {
+    this.$http.get('http://localhost:8080/api/seller').then((response) => {
+      console.log(response.data)
+    })
   },
   mounted () {
   }
